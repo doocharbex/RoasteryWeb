@@ -1,1 +1,244 @@
 @import "tailwindcss";
+
+@theme {
+  --color-paper: #f4f1e9;
+  --color-paper2: #ece7da;
+  --color-card: #faf8f1;
+  --color-ink: #1b150d;
+  --color-ink2: #55493a;
+  --color-ink3: #8a7d6b;
+  --color-nili: #1c4fd8;
+  --color-nili-deep: #123a9e;
+  --color-nili-soft: #dbe4fa;
+  --color-leaf: #2e5d43;
+  --color-amber: #c77e32;
+  --color-line: #ddd5c3;
+
+  --font-display: "Lalezar", "Vazirmatn", serif;
+  --font-body: "Vazirmatn", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-nili);
+  color: var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink3);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-nili);
+}
+
+/* ---------- grain / noise overlay ---------- */
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- reveal on scroll ---------- */
+.rv {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.rv.on {
+  opacity: 1;
+  transform: none;
+}
+
+/* line-mask reveal for display type */
+.lm {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+}
+.lm > span {
+  display: block;
+  transform: translateY(115%);
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.on .lm > span,
+.lm.on > span {
+  transform: translateY(0);
+}
+
+/* ---------- marquee ---------- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---------- ken burns breathing ---------- */
+@keyframes kenburns {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    transform: scale(1.09) translateY(-1.5%);
+  }
+}
+.kenburns {
+  animation: kenburns 14s ease-in-out infinite alternate;
+}
+
+/* ---------- rotating stamp ---------- */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+/* ---------- steam ---------- */
+@keyframes steam {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scaleX(0.9);
+  }
+  35% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scaleX(1.15);
+  }
+}
+.steam path {
+  animation: steam 3s ease-in-out infinite;
+}
+.steam path:nth-child(2) {
+  animation-delay: 0.9s;
+}
+.steam path:nth-child(3) {
+  animation-delay: 1.7s;
+}
+
+/* ---------- cart badge pop ---------- */
+@keyframes pop {
+  0% {
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pop {
+  animation: pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- toast ---------- */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast-in {
+  animation: toast-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- underline sweep for links ---------- */
+.link-sweep {
+  position: relative;
+}
+.link-sweep::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  right: 0;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-sweep:hover::after {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+
+/* ---------- arch image frame ---------- */
+.arch {
+  border-radius: 999px 999px 18px 18px;
+}
+
+/* ---------- dashed ring ---------- */
+.ring-dashed {
+  stroke-dasharray: 6 7;
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .rv,
+  .lm > span {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+  }
+  .kenburns,
+  .spin-slow {
+    animation: none !important;
+  }
+}
